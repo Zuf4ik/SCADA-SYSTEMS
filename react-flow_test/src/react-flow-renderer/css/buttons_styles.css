@@ -1,0 +1,93 @@
+.Zadv {
+    position: fixed;
+    padding: auto;
+    width: 100px;
+    height: 50px;
+    left: 135px;
+    top: 286px;
+}
+
+.Zadv-Right {
+    position: absolute;
+    width: 100px;
+    height: 50px;
+    left: 135px;
+    top: 336px;
+}
+
+.Zadv-Bot {
+    position: absolute;
+    width: 100px;
+    height: 50px;
+    left: 135px;
+    top: 386px;
+}
+
+.Zadv-Left {
+    position: absolute;
+    width: 100px;
+    height: 50px;
+    left: 135px;
+    top: 436px;
+}
+
+.IndZadv {
+    position: absolute;
+    width: 100px;
+    height: 50px;
+    left: 135px;
+    top: 486px;
+}
+
+.Regul {
+    position: absolute;
+    width: 100px;
+    height: 50px;
+    left: 135px;
+    top: 136px;
+}
+
+.Flaaag {
+    position: absolute;
+    width: 100px;
+    height: 50px;
+    left: 135px;
+    top: 186px;
+}
+
+.Cistern {
+    position: absolute;
+    width: 100px;
+    height: 50px;
+    left: 135px;
+    top: 236px;
+}
+
+.Untitled {
+    position: absolute;
+    width: 100px;
+    height: 50px;
+    left: 135px;
+    top: 86px;
+}
+
+img {
+    width: 40px;
+}
+
+
+.Buttons {
+    -webkit-touch-callout: none;
+    /* iOS Safari */
+    -webkit-user-select: none;
+    /* Chrome/Safari/Opera */
+    -khtml-user-select: none;
+    /* Konqueror */
+    -moz-user-select: none;
+    /* Firefox */
+    -ms-user-select: none;
+    /* Internet Explorer/Edge */
+    user-select: none;
+    /* Non-prefixed version, currently
+not supported by any browser */
+}

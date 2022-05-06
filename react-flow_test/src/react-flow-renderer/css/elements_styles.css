@@ -1,0 +1,376 @@
+
+
+/* ---------------------  Задвижка  ----------------------- */
+
+
+.triangle-node-right {
+    background-color: "#9ca8b3";
+    width: 0px;
+    height: 0px;
+    border-style: inset;
+    border-width: 0 25px 40px 25px;
+    border-color: transparent transparent green transparent;
+    float: left;
+    transform: rotate(90deg);
+    -ms-transform: rotate(90deg);
+    -moz-transform: rotate(90deg);
+    -webkit-transform: rotate(90deg);
+    -o-transform: rotate(90deg);
+    
+  }
+
+  .triangle-node-left {
+    background-color: "#9ca8b3";
+    width: 0px;
+    height: 0px;
+    border-style: inset;
+    border-width: 0 25px 40px 25px;
+    border-color: transparent transparent green transparent;
+    float: left;
+    transform: rotate(270deg);
+    -ms-transform: rotate(270deg);
+    -moz-transform: rotate(270deg);
+    -webkit-transform: rotate(270deg);
+    -o-transform: rotate(270deg);
+  }
+
+  .rect-node-top{
+    width: 90px;
+    height: 15px;
+    background: green;
+    transform: translate(5px, -30px);
+  }
+
+
+  .rect-node-center{
+    width: 15px;
+    height: 40px;
+    background: green;
+    transform: translate(43px, -35px);
+  }
+
+  /* ---------------------  Независимая Задвижка  ----------------------- */
+
+
+.IndGateValve-right {
+  background-color: "#9ca8b3";
+  width: 0px;
+  height: 0px;
+  border-style: inset;
+  border-width: 0 25px 55px 25px;
+  border-color: transparent transparent rgb(238,204,170) transparent;
+  float: left;
+  transform: rotate(90deg);
+  -ms-transform: rotate(90deg);
+  -moz-transform: rotate(90deg);
+  -webkit-transform: rotate(90deg);
+  -o-transform: rotate(90deg);
+}
+
+.IndGateValve-left {
+  background-color: "#9ca8b3";
+  width: 0px;
+  height: 0px;
+  border-style: inset;
+  border-width: 0 25px 55px 25px;
+  border-color: transparent transparent rgb(238,204,170) transparent;
+  float: left;
+  transform: rotate(270deg);
+  -ms-transform: rotate(270deg);
+  -moz-transform: rotate(270deg);
+  -webkit-transform: rotate(270deg);
+  -o-transform: rotate(270deg);
+}
+
+
+  /* ---------------------  Задвижка Праваая ----------------------- */
+
+.GateValveRight{
+  transform: rotate(90deg);
+  -ms-transform: rotate(90deg);
+  -moz-transform: rotate(90deg);
+  -webkit-transform: rotate(90deg);
+  -o-transform: rotate(90deg);
+}
+
+
+  /* ---------------------  Задвижка Низ ----------------------- */
+
+  .GateValveBot{
+    transform: rotate(180deg);
+    -ms-transform: rotate(180deg);
+    -moz-transform: rotate(180deg);
+    -webkit-transform: rotate(180deg);
+    -o-transform: rotate(180deg);
+  }
+
+
+    /* ---------------------  Задвижка Левая ----------------------- */
+
+    .GateValveLeft{
+      transform: rotate(270deg);
+      -ms-transform: rotate(270deg);
+      -moz-transform: rotate(270deg);
+      -webkit-transform: rotate(270deg);
+      -o-transform: rotate(270deg);
+    }
+  
+
+
+   /* ---------------------  Регулятор  ----------------------- */
+
+  .rect-node-circle{
+    width: 40px;
+    height: 20px;
+    background: green;
+    transform: translate(30px, 90px);
+  }
+
+  .rect-node-circle-center{
+    width: 5px;
+    height: 80px;
+    background: rgb(255, 255, 255);
+    transform: translate(47px, -10px);
+  }
+  
+
+ /* ---------------------  Хз  ----------------------- */
+
+  .triangle-node-text {
+    text-align: center;
+    top: 40px;
+    left: -23px;
+    position: relative;
+    width: 46px;
+    height: 46px;
+    margin: 0px;
+  }
+  
+
+ /* ---------------------  Флажок  ----------------------- */
+
+  .Flag {
+    background-color: "#9ca8b3";
+    width: 0px;
+    height: 0px;
+    border-style: inset;
+    border-width: 0 40px 60px 40px;
+    border-color: transparent transparent rgb(2, 99, 2) transparent;
+    float: left;
+    transform: rotate(90deg);
+    -ms-transform: rotate(90deg);
+    -moz-transform: rotate(90deg);
+    -webkit-transform: rotate(90deg);
+    -o-transform: rotate(90deg);
+  }
+
+  .flag-node-center{
+    width: 3px;
+    height: 120px;
+    background: rgb(0, 0, 0);
+    transform: translate(10px, -10px);
+  }
+
+
+   /* ---------------------  Насос верхняя часть  ----------------------- */
+
+   .cistern-top{
+    background: rgb(184, 181, 181);
+    width: 100px;
+    height: 45px;
+    border-radius: 100px/50px;
+    border-style: solid; 
+    margin-top: 50px;
+   }
+
+   .cistern-box{
+    background: rgb(184, 181, 181);
+    width: 100px;
+    height: 45px;
+    margin-top: 20px;
+    margin-left: -3px;
+    border-style: solid; 
+   }
+
+.cistern{
+    background: rgb(184, 181, 181);
+    width: 100px;
+    height: 45px;
+    border-radius: 100px/50px;
+    margin-top: -80px;
+    margin-left: -3px;
+    border-style: solid;
+}
+
+.cistern-bot{
+  background: rgb(184, 181, 181);
+  width: 100px;
+  height: 50px;
+  border-radius: 100px/50px;
+  margin-top: 0px;
+  margin-left: -3px;
+  border-style: solid;
+}
+
+.cistern-bot-box{
+  background: rgb(184, 181, 181);
+  width: 100px;
+  height: 30px;
+  margin-top: -56px;
+  margin-left: 0px; 
+}
+
+
+   /* ---------------------  Насос нижняя часть  ----------------------- */
+
+.cistern-rectangle-left{
+  background: rgb(0, 99, 27);
+  right: calc((100vw - 1000px) / 2);
+  width: 20px;
+  height: 20px;
+  margin-top: 40px;
+  margin-left: 10px; 
+  border-style: solid;
+}
+
+.cistern-rectangle-center{
+  background: rgb(0, 99, 27);
+  right: calc((100vw - 1000px) / 2);
+  padding: 0;
+  width: 20px;
+  height: 20px;
+  margin-top: -26px;
+  margin-left: 35px; 
+  border-style: solid;
+}
+
+.cistern-rectangle-right{
+  background: rgb(0, 99, 27);
+  right: calc((100vw - 1000px) / 2);
+  width: 20px;
+  height: 20px;
+  margin-top: -26px;
+  margin-left: 60px; 
+  border-style: solid;
+}
+
+
+
+ /* ---------------------  Панель управления rectangle  ----------------------- */
+
+
+/* ---------------------  Панель управления rectangle  1 часть ----------------------- */
+
+
+ .CU-rectangle-one{
+  background: rgb(0, 99, 27);
+  width: 10px;
+  height: 10px;
+  margin-top: 40px;
+  margin-left: 10px; 
+  border-style: solid;
+}
+
+.CU-rectangle-two{
+  background: rgb(0, 99, 27);
+  width: 10px;
+  height: 10px;
+  margin-top: -16px;
+  margin-left: 26px; 
+  border-style: solid;
+}
+
+.CU-rectangle-three{
+  background: rgb(0, 99, 27);
+  width: 10px;
+  height: 10px;
+  margin-top: -16px;
+  margin-left: 42px; 
+  border-style: solid;
+}
+
+
+.CU-rectangle-four{
+  background: rgb(0, 99, 27);
+  width: 10px;
+  height: 10px;
+  margin-top: -16px;
+  margin-left: 58px; 
+  border-style: solid;
+}
+
+
+.CU-rectangle-five{
+  background: rgb(0, 99, 27);
+  width: 10px;
+  height: 10px;
+  margin-top: -16px;
+  margin-left: 72px; 
+  border-style: solid;
+}
+
+
+/* ---------------------  Панель управления rectangle  2 часть ----------------------- */
+
+
+.CU-rectangle{
+  background: rgb(1, 180, 49);
+  width: 72px;
+  height: 30px;
+  margin-left: 10px; 
+  border-style: solid;
+}
+
+/* ---------------------  Панель управления rectangle  3 часть ----------------------- */
+
+
+.CU-center-left-top{
+  background: rgb(74, 99, 81);
+  width: 25px;
+  height: 10px;
+  margin-top: 0px;
+  margin-left: 10px; 
+  border-style: double;
+}
+
+
+.CU-center-right-top{
+  background: rgb(74, 99, 81);
+  width: 42px;
+  height: 10px;
+  margin-top: -16px;
+  margin-left: 40px; 
+  border-style: double;
+}
+
+.CU-center-left-bot{
+  background: rgb(1, 180, 49);
+  width: 25px;
+  height: 10px;
+  margin-top: 0px;
+  margin-left: 10px; 
+  border-style: double;
+}
+
+
+.CU-center-right-bot{
+  background: rgb(1, 180, 49);
+  width: 42px;
+  height: 10px;
+  margin-top: -16px;
+  margin-left: 40px; 
+  border-style: double;
+}
+
+
+
+/* ---------------------  Панель управления rectangle  4 часть ----------------------- */
+
+
+.CU-rectangle-bot{
+  background: rgb(1, 180, 49);
+  width: 72px;
+  height: 30px;
+  margin-left: 10px; 
+  border: 3px double;
+}
