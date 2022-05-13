@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { ExportCSV } from './ExportCSV ';
 import "./css/buttons_styles.css"
 import ReactFlow, {
@@ -6,14 +6,27 @@ import ReactFlow, {
     updateEdge,
     addEdge,
     Background,
-    Controls
+    Controls,
+    ReactFlowProvider,
+    useZoomPanHelper
 } from 'react-flow-renderer';
+import localforage from 'localforage';
 import { nodeTypes } from './Nodes';
 import styleConnect from './style-connect';
 const socket = new WebSocket('ws://localhost:5000/')
 
+
+localforage.config({
+  name: 'react-flow-docs',
+  storeName: 'flows',
+});
+
+
+
+
 const ReactFlowRenderer = () => {
     const [elements, setElements] = useState([styleConnect]);
+
 
     // ------------------- Экспорт в Excel ------------------
 
@@ -22,25 +35,63 @@ const ReactFlowRenderer = () => {
     const [activeNode, setActiveNode] = useState();
     const [newName, setNewName] = useState("");
     const [instance, setInstance] = useState();
+    const [connected, setConnected] = useState(false);
+    const { transform } = useZoomPanHelper();
+
+    const flowKey = 'example-flow';
 
     useEffect(() => {
         if (activeNode) setNewName(activeNode.data.label);
     }, [activeNode]);
 
 
-        // --------------- Удаление ---------------
+    // --------------- Сохранение ---------------
+
+    const onSave = useCallback(() => {
+
+        if (instance) {
+            const flow = instance.toObject();
+            localforage.setItem(flowKey, flow);
+        }
+    }, [instance]);
 
 
-        const elementRemoveHandler = (elementTobeRemoved) => {
-            setElements((prev) => removeElements(elementTobeRemoved, prev));
+
+    // --------------- Загрузка ---------------
+
+    const onRestore = useCallback(() => {
+        const restoreFlow = async () => {
+            const flow = await localforage.getItem(flowKey);
+
+
+            if (flow) {
+                const [x = 0, y = 0] = flow.position;
+                setElements(flow.elements || []);
+                transform({ x, y, zoom: flow.zoom || 0 });
+            }
+
         };
-    
+        restoreFlow();
+    }, [setElements, transform]);
+
+
+
+    // --------------- Удаление ---------------
+
+
+    const elementRemoveHandler = (elementTobeRemoved) => {
+        setElements((prev) => removeElements(elementTobeRemoved, prev));
+    };
+
+
 
 
     const connectHandler = (params) => {
         setElements((els) =>
             addEdge({ ...params, type: 'step', style: { stroke: 'red' } }, els))
     };
+
+
 
 
     // ----------------------- Добавление элементов --------------------------
@@ -288,21 +339,63 @@ const ReactFlowRenderer = () => {
         reactFlowInstance.fitView();
     };
 
-    //save pos
-    const saveChangesHandler = () => {
-        console.log("state", instance.getElements());
-        //отправка json
-        localStorage.setItem('state', JSON.stringify(instance.getElements()));
-        var pos = JSON.stringify(instance.getElements());
-        socket.send(pos);
-    };
-
     socket.onopen = () => {
+        setConnected(true);
         console.log('подключено');
     }
 
+    /*
     socket.onmessage = (event) => {
-        console.log('есть сообщение', event.data)
+        console.log('есть сообщение')
+        const lineSignal = JSON.parse(event.data);
+        console.log(lineSignal);
+        let linedate = event.data;
+        console.log(linedate);
+        let json = JSON.stringify(linedate);
+        console.log(json);
+        let fileName = 'signal.json'
+
+        let fileToSave = new Blob([JSON.stringify(json, null, 4)], {
+            type: 'application/json',
+            name: fileName
+        })
+        saveAs (fileToSave, fileName);
+    }
+    */
+
+    socket.onmessage = (event) => {
+        let msg = JSON.parse(event.data);
+        console.log('есть сообщение')
+        console.log(msg);
+    };
+    const signalSocket = (msg) => {
+        console.log(signalSocket.msg);
+        console.log(signalSocket.msg);
+        console.log(signalSocket.msg);
+    }
+
+
+    //save pos
+    const saveChangesHandler = () => {
+        console.log("state", instance.getElements());
+        //сохранение в локальное хранилище
+        localStorage.setItem('Position', JSON.stringify(instance.getElements()));
+        //отправка json
+        let pos = JSON.stringify(instance.getElements());
+        socket.send(pos);
+    }
+
+    socket.onclose = function (event) {
+        if (event.wasClean) {
+            console.log('Соединение закрыто чисто')
+        } else {
+            console.log('Обрыв соединения')
+        }
+        console.log('Код: ' + event.code + ' причина: ' + event.reason)
+    }
+
+    socket.onerror = function (event) {
+        console.log(event);
     }
 
 
@@ -313,7 +406,7 @@ const ReactFlowRenderer = () => {
                 height: "75vh",
                 width: "75vw",
                 border: "1px solid black",
-                marginLeft: "12.5vw"
+                marginLeft: "20.2vw"
             }}
         >
             <ReactFlow
@@ -408,8 +501,11 @@ const ReactFlowRenderer = () => {
             <div className='Buttons'>
 
 
+                <button type="button" onClick={onRestore}>
+                    Загрузка
+                </button>
 
-                <button type="button" onClick={saveChangesHandler}>
+                <button type="button" onClick={onSave}>
                     Сохранить
                 </button>
 
@@ -419,4 +515,8 @@ const ReactFlowRenderer = () => {
     );
 };
 
-export default ReactFlowRenderer;
+export default () => (
+    <ReactFlowProvider>
+        <ReactFlowRenderer />
+    </ReactFlowProvider>
+);
