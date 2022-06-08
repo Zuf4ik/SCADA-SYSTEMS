@@ -12,31 +12,36 @@ import ReactFlow, {
 } from 'react-flow-renderer';
 import localforage from 'localforage';
 import { nodeTypes } from './Nodes';
-import styleConnect from './style-connect';
-const socket = new WebSocket('ws://localhost:5000/')
-
-
+// const socket = new WebSocket('ws://localhost:5000/')
 localforage.config({
-  name: 'react-flow-docs',
-  storeName: 'flows',
+    name: 'react-flow-docs',
+    storeName: 'flows',
 });
 
 
 
 
+
+
 const ReactFlowRenderer = () => {
-    const [elements, setElements] = useState([styleConnect]);
+
+
+
+
+    const [elements, setElements] = useState([]);
+
 
 
     // ------------------- Экспорт в Excel ------------------
 
     const fileName = 'Scada'
+
     const [name, setName] = useState("");
     const [activeNode, setActiveNode] = useState();
     const [newName, setNewName] = useState("");
     const [instance, setInstance] = useState();
-    const [connected, setConnected] = useState(false);
     const { transform } = useZoomPanHelper();
+
 
     const flowKey = 'example-flow';
 
@@ -45,14 +50,16 @@ const ReactFlowRenderer = () => {
     }, [activeNode]);
 
 
-    // --------------- Сохранение ---------------
+    // --------------- Сохранение в локальном хранилище ---------------
 
     const onSave = useCallback(() => {
 
         if (instance) {
             const flow = instance.toObject();
             localforage.setItem(flowKey, flow);
+            console.log("Объекты сохранены")
         }
+
     }, [instance]);
 
 
@@ -72,8 +79,50 @@ const ReactFlowRenderer = () => {
 
         };
         restoreFlow();
-    }, [setElements, transform]);
+    }, [setElements, transform]
 
+    );
+
+    // --------------- Загрузка через локальный диск ---------------
+
+    const loadJson = useCallback((uploadedFile) => {
+        const fileReader = new FileReader();
+        fileReader.onloadend = () => {
+            try {
+                setElements(JSON.parse(fileReader.result));
+                // setErrorData(null)
+            } catch (e) {
+                alert("Не файл JSON!");
+
+            }
+        }
+        if (typeof uploadedFile !== undefined)
+            fileReader.readAsText(uploadedFile);
+
+          },
+    );
+
+
+
+    // --------------- Сохранение через локальный диск ---------------
+
+
+    const exportToJson = () => {
+        let filename = "Scada-systems.json";
+        let contentType = "application/json;charset=utf-8;";
+        if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+            const blob = new Blob([decodeURIComponent(encodeURI(JSON.stringify(instance.getElements())))], { type: contentType });
+            navigator.msSaveOrOpenBlob(blob, filename);
+        } else {
+            const a = document.createElement('a');
+            a.download = filename;
+            a.href = 'data:' + contentType + ',' + encodeURIComponent(JSON.stringify(instance.getElements()));
+            a.target = '_blank';
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        }
+    }
 
 
     // --------------- Удаление ---------------
@@ -82,8 +131,6 @@ const ReactFlowRenderer = () => {
     const elementRemoveHandler = (elementTobeRemoved) => {
         setElements((prev) => removeElements(elementTobeRemoved, prev));
     };
-
-
 
 
     const connectHandler = (params) => {
@@ -100,7 +147,7 @@ const ReactFlowRenderer = () => {
         const newNode = {
             id: `${Date.now()}`,
             data: { label: `${name}` },
-            type: "rectangle",
+            type: "pump",
             position: {
                 x: 0,
                 y: 0
@@ -290,6 +337,8 @@ const ReactFlowRenderer = () => {
     };
 
 
+
+
     // --------------- Убрать, грубо говоря, линии с задвижки ---------------
 
 
@@ -333,70 +382,36 @@ const ReactFlowRenderer = () => {
         );
     };
 
-
     const onLoad = (reactFlowInstance) => {
         setInstance(reactFlowInstance);
         reactFlowInstance.fitView();
     };
 
-    socket.onopen = () => {
-        setConnected(true);
-        console.log('подключено');
-    }
-
-    /*
-    socket.onmessage = (event) => {
-        console.log('есть сообщение')
-        const lineSignal = JSON.parse(event.data);
-        console.log(lineSignal);
-        let linedate = event.data;
-        console.log(linedate);
-        let json = JSON.stringify(linedate);
-        console.log(json);
-        let fileName = 'signal.json'
-
-        let fileToSave = new Blob([JSON.stringify(json, null, 4)], {
-            type: 'application/json',
-            name: fileName
-        })
-        saveAs (fileToSave, fileName);
-    }
-    */
-
-    socket.onmessage = (event) => {
-        let msg = JSON.parse(event.data);
-        console.log('есть сообщение')
-        console.log(msg);
-    };
-    const signalSocket = (msg) => {
-        console.log(signalSocket.msg);
-        console.log(signalSocket.msg);
-        console.log(signalSocket.msg);
-    }
 
 
-    //save pos
-    const saveChangesHandler = () => {
-        console.log("state", instance.getElements());
-        //сохранение в локальное хранилище
-        localStorage.setItem('Position', JSON.stringify(instance.getElements()));
-        //отправка json
-        let pos = JSON.stringify(instance.getElements());
-        socket.send(pos);
-    }
 
-    socket.onclose = function (event) {
-        if (event.wasClean) {
-            console.log('Соединение закрыто чисто')
-        } else {
-            console.log('Обрыв соединения')
-        }
-        console.log('Код: ' + event.code + ' причина: ' + event.reason)
-    }
+    // --------------- Сохранение через сервер ---------------
 
-    socket.onerror = function (event) {
-        console.log(event);
-    }
+
+    // //save pos
+    // const saveChangesHandler = () => {
+    //     console.log("state", instance.getElements());
+    //     //отправка json
+
+    //     localStorage.setItem('state', JSON.stringify(instance.getElements()));
+    //     var pos = JSON.stringify(instance.getElements());
+    //     socket.send(pos);
+    // };
+
+    // socket.onopen = () => {
+    //     console.log('подключено');
+    // }
+
+    // socket.onmessage = (event) => {
+    //     console.log('есть сообщение')
+    //     const dataSave = JSON.parse(JSON.stringify(event.data));
+    //     console.log(dataSave)
+    // }
 
 
 
@@ -406,7 +421,7 @@ const ReactFlowRenderer = () => {
                 height: "75vh",
                 width: "75vw",
                 border: "1px solid black",
-                marginLeft: "20.2vw"
+                marginLeft: "14.7em"
             }}
         >
             <ReactFlow
@@ -418,12 +433,13 @@ const ReactFlowRenderer = () => {
                 nodeTypes={nodeTypes}
                 snapToGrid={true}
                 snapGrid={[16, 16]}
-                connectionLineStyle={{ stroke: "red", strokeWidth: 2 }}
+                connectionLineStyle={{ stroke: "red", type: 'step', strokeWidth: 2 }}
                 // При двойном нажатии  на мышку приближает 
                 onDoubleClick={clickHandler}
                 onLoad={onLoad}
             >
                 <Background variant="dots" gap={15} size={2} color="#c8c8c8" />
+
                 <Controls />
             </ReactFlow>
 
@@ -439,9 +455,10 @@ const ReactFlowRenderer = () => {
                     Текст
                 </button>
 
-                <button>
+                <button >
                     <ExportCSV csvData={elements} fileName={fileName} />
                 </button>
+
 
             </div>
 
@@ -501,15 +518,27 @@ const ReactFlowRenderer = () => {
             <div className='Buttons'>
 
 
-                <button type="button" onClick={onRestore}>
-                    Загрузка
+                <button type='button' onClick={onRestore}>
+                    Загрузить
                 </button>
 
-                <button type="button" onClick={onSave}>
+
+
+                <button type='button' onClick={onSave}>
+                    Сохранить состояние
+                </button>
+
+
+                <button type='button' onClick={exportToJson}>
                     Сохранить
                 </button>
 
+
             </div>
+
+            <input type="file"
+                onChange={(e) => loadJson(e.target.files[0])} />
+
 
         </div>
     );

@@ -460,7 +460,7 @@ export const nodeTypes = {
   controlunit: ControlUnit,
   indgatevalve: IndGateValve,
   circle: CircleNode,
-  rectangle: RectangleNode,
+  pump: RectangleNode,
   gatevalve: GateValve,
   gatevalveright: GateValveRight,
   gatevalvebot: GateValveBot,

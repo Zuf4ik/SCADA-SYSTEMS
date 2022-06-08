@@ -1,6 +1,5 @@
 .Zadv{
-    position: fixed;
-    padding: auto;
+    position: absolute;
     width: 100px;
     height: 50px;
     left: 135px;
