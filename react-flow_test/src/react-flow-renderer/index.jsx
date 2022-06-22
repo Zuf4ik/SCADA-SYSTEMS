@@ -7,16 +7,10 @@ import ReactFlow, {
     addEdge,
     Background,
     Controls,
-    ReactFlowProvider,
-    useZoomPanHelper
+    ReactFlowProvider
 } from 'react-flow-renderer';
-import localforage from 'localforage';
 import { nodeTypes } from './Nodes';
-// const socket = new WebSocket('ws://localhost:5000/')
-localforage.config({
-    name: 'react-flow-docs',
-    storeName: 'flows',
-});
+
 
 
 
@@ -31,7 +25,6 @@ const ReactFlowRenderer = () => {
     const [elements, setElements] = useState([]);
 
 
-
     // ------------------- Экспорт в Excel ------------------
 
     const fileName = 'Scada'
@@ -40,48 +33,15 @@ const ReactFlowRenderer = () => {
     const [activeNode, setActiveNode] = useState();
     const [newName, setNewName] = useState("");
     const [instance, setInstance] = useState();
-    const { transform } = useZoomPanHelper();
 
 
-    const flowKey = 'example-flow';
 
     useEffect(() => {
         if (activeNode) setNewName(activeNode.data.label);
     }, [activeNode]);
 
 
-    // --------------- Сохранение в локальном хранилище ---------------
 
-    const onSave = useCallback(() => {
-
-        if (instance) {
-            const flow = instance.toObject();
-            localforage.setItem(flowKey, flow);
-            console.log("Объекты сохранены")
-        }
-
-    }, [instance]);
-
-
-
-    // --------------- Загрузка ---------------
-
-    const onRestore = useCallback(() => {
-        const restoreFlow = async () => {
-            const flow = await localforage.getItem(flowKey);
-
-
-            if (flow) {
-                const [x = 0, y = 0] = flow.position;
-                setElements(flow.elements || []);
-                transform({ x, y, zoom: flow.zoom || 0 });
-            }
-
-        };
-        restoreFlow();
-    }, [setElements, transform]
-
-    );
 
     // --------------- Загрузка через локальный диск ---------------
 
@@ -92,19 +52,19 @@ const ReactFlowRenderer = () => {
                 setElements(JSON.parse(fileReader.result));
                 // setErrorData(null)
             } catch (e) {
-                alert("Не файл JSON!");
+                alert("Неверный формат данных!");
 
             }
         }
         if (typeof uploadedFile !== undefined)
             fileReader.readAsText(uploadedFile);
-
-          },
+    },
     );
 
 
 
     // --------------- Сохранение через локальный диск ---------------
+
 
 
     const exportToJson = () => {
@@ -116,13 +76,14 @@ const ReactFlowRenderer = () => {
         } else {
             const a = document.createElement('a');
             a.download = filename;
-            a.href = 'data:' + contentType + ',' + encodeURIComponent(JSON.stringify(instance.getElements()));
+            a.href = 'data:' + contentType + ',' + encodeURIComponent(JSON.stringify(instance.getElements(), null, 2));
             a.target = '_blank';
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
         }
     }
+
 
 
     // --------------- Удаление ---------------
@@ -513,32 +474,27 @@ const ReactFlowRenderer = () => {
                 <button type="button" onClick={updateNodeHandler}>
                     Обновить
                 </button>
-            </div>
-
-            <div className='Buttons'>
-
-
-                <button type='button' onClick={onRestore}>
-                    Загрузить
-                </button>
-
-
-
-                <button type='button' onClick={onSave}>
-                    Сохранить состояние
-                </button>
 
 
                 <button type='button' onClick={exportToJson}>
                     Сохранить
                 </button>
 
-
             </div>
 
-            <input type="file"
-                onChange={(e) => loadJson(e.target.files[0])} />
 
+
+
+            <div className='Buttons'>
+
+
+
+                <input type="file"
+                    onChange={(e) => loadJson(e.target.files[0])} />
+
+
+
+            </div>
 
         </div>
     );
